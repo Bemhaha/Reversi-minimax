@@ -1,3 +1,4 @@
+import aisearch
 from tkinter import *
 from tkinter import messagebox
 
@@ -10,7 +11,7 @@ class Reversi:
         self.negro = PhotoImage(file="negro.png")
         self.blanco = PhotoImage(file="blanco.png")
         self.vacio = PhotoImage(file="vacio.png")
-        #self.juego = aisearch.ReversiMiniMax()
+        self.juego = aisearch.ReversiGame()
 
         for i in range(6):
             fila=[]
@@ -44,6 +45,17 @@ class Reversi:
 
     def click(self, evento):
         print("i do nothing")
+        if self.juego.tablero[evento.widget.x][evento.widget.y] ==0:
+            self.juego.jugar(evento.widget.x, evento.widget.y)
+            evento.widget["image"] = self.negro
+            print(self.juego.tablero)
+            if not self.victoria():
+                o = []
+                m = aisearch.minimax(juego, 1, [], o)
+                self.juego.jugar(m[1].x, m[1].y)
+                self.botones[m[1].x][m[1].y]["image"] = self.blanco
+                self.victoria()
+
 
 juego = Reversi()
 mainloop()
