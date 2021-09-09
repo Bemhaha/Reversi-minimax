@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 
-class reversi:
+class Reversi:
 
     def __init__(self):
         self.principal = Tk()
@@ -22,12 +22,28 @@ class reversi:
                 b1.grid(row=i, column=j)
                 fila.append(b1)
             self.botones.append(fila)
-    
+   
     def victoria(self):
-        print("hi, i do nothing")
+        if self.juego.estado_final():
+            if self.juego.ganador == 1:
+                messagebox.showinfo("Reversi", "has ganado")
+            elif self.juego.ganador == 0:
+                messagebox.showinfo("Reversi", "Empate")
+            else:
+                messagebox.showinfo("Reversi", "Has perdido")
+            self.juego.reiniciar()
+
+            for i in range(6):
+                for j in range(6):
+                    self.botones[i][j]["image"] = self.vacio
+            
+            return True
+        else:
+            return False 
+
 
     def click(self, evento):
         print("i do nothing")
 
-juego = reversi()
+juego = Reversi()
 mainloop()
