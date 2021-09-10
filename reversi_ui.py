@@ -23,7 +23,17 @@ class Reversi:
                 b1.grid(row=i, column=j)
                 fila.append(b1)
             self.botones.append(fila)
-   
+        
+        self.botones[2][2]["image"] = self.blanco
+        self.juego.tablero[2][2] = "1"
+        self.botones[3][3]["image"] = self.blanco
+        self.juego.tablero[3][3] = "1"
+        self.botones[3][2]["image"] = self.negro
+        self.juego.tablero[3][2] = "-1"
+        self.botones[2][3]["image"] = self.negro
+        self.juego.tablero[2][3] = "-1"
+        
+
     def victoria(self):
         if self.juego.estado_final():
             if self.juego.ganador == 1:
@@ -37,7 +47,7 @@ class Reversi:
             for i in range(6):
                 for j in range(6):
                     self.botones[i][j]["image"] = self.vacio
-            
+
             return True
         else:
             return False 
