@@ -32,14 +32,9 @@ class ReversiGame:
         return tablero      
 
 #buscar posibles jugadas
-    def jugadaValida(self, tablero , jugador, x, y):
+    def jugadaValida(self, tablero , ficha, x, y):
 
         #print("fui llamada")
-
-        if jugador == "1":
-            ficha = "1"
-        else:
-            ficha = "-1"
         
         if tablero[x][y] != "0":
             return False
@@ -70,19 +65,19 @@ class ReversiGame:
                         #modulo
                         varX = adyX - x
                         varY = adyY - y
-                        estX = adyX
-                        estY = adyY
+                        auxX = adyX
+                        auxY = adyY
 
-                        while 0 <= estX <=5 and 0 <= estY <= 5:
-                            if tablero[estX][estY] == "0":
+                        while 0 <= auxX <=5 and 0 <= auxY <= 5:
+                            if tablero[auxX][auxY] == "0":
                                 break
 
-                            if tablero[estX][estY] == ficha:
+                            if tablero[auxX][auxY] == ficha:
                                 booleano = True
                                 break
 
-                            estX += varX
-                            estY += varY
+                            auxX += varX
+                            auxY += varY
                 return booleano
 
 
@@ -104,7 +99,7 @@ class ReversiGame:
     
     def jugar(self, jugadax, jugaday):
         self.tablero[jugadax][jugaday] = self.jugador
-        self.jugador*=-1 #ni idea que hace esto jaja
+        self.jugador *= -1 #ni idea que hace esto jaja
         
 
     def minimax(juego, etapa, secuencia, secuencias):
