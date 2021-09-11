@@ -11,6 +11,7 @@ class Reversi:
         self.negro = PhotoImage(file="negro.png")
         self.blanco = PhotoImage(file="blanco.png")
         self.vacio = PhotoImage(file="vacio.png")
+        self.sugerencia = PhotoImage(file="sugerencia.png")
         self.juego = aisearch.ReversiGame()
 
         for i in range(6):
@@ -25,13 +26,29 @@ class Reversi:
             self.botones.append(fila)
         
         self.botones[2][2]["image"] = self.blanco
-        self.juego.tablero[2][2] = "1"
+        self.juego.tablero[2][2] = "-1"
         self.botones[3][3]["image"] = self.blanco
-        self.juego.tablero[3][3] = "1"
+        self.juego.tablero[3][3] = "-1"
         self.botones[3][2]["image"] = self.negro
-        self.juego.tablero[3][2] = "-1"
+        self.juego.tablero[3][2] = "1"
         self.botones[2][3]["image"] = self.negro
-        self.juego.tablero[2][3] = "-1"
+        self.juego.tablero[2][3] = "1"
+        self.pistas("1")
+
+    
+    def pistas(self, jugador):
+
+        #print("buscando pistas")
+        tablero = self.juego.tablero
+        for x in range(6):
+            for y in range(6):
+                #print("buscando pistas2")
+                if jugador == "1":
+                    #print("buscando pistas3")
+                    if self.juego.jugadaValida(tablero, jugador, x, y):
+                        self.botones[x][y]["image"] = self.sugerencia
+                        #print("cambio sugerencia")
+
         
 
     def victoria(self):
@@ -54,16 +71,17 @@ class Reversi:
 
 
     def click(self, evento):
-        print("i do nothing")
-        if self.juego.tablero[evento.widget.x][evento.widget.y] ==0:
+        #print("i do nothing")
+        if self.juego.tablero[evento.widget.x][evento.widget.y] == "0":
             self.juego.jugar(evento.widget.x, evento.widget.y)
             evento.widget["image"] = self.negro
             print(self.juego.tablero)
             if not self.victoria():
-                o = []
-                m = aisearch.minimax(juego, 1, [], o)
-                self.juego.jugar(m[1].x, m[1].y)
-                self.botones[m[1].x][m[1].y]["image"] = self.blanco
+                #o = []
+                #m = aisearch.minimax(juego, 1, [], o)
+                #self.juego.jugar(m[1].x, m[1].y)
+                #self.botones[m[1].x][m[1].y]["image"] = self.blanco
+                self.pistas("1")
                 self.victoria()
 
 

@@ -1,18 +1,11 @@
-from tkinter.constants import E, NO
+from tkinter.constants import E, FALSE, NO
 
 
 class ReversiGame:
 
-    def __init__(self, turno = 1):
-        
-        estado = []
+    def __init__(self, turno = "-1"):
 
-        for i in range(6):
-            estado.append([])
-            for j in range(6):
-                estado[i].append(0)
-
-        self.tablero = estado
+        self.tablero = self.generaTablero()
         self.completo = False
         self.ganador = None
         self.jugador = turno
@@ -22,21 +15,79 @@ class ReversiGame:
 
     def reinciar(self):
 
+        self.tablero= self.generaTablero()
+        self.completo = False
+        self.ganador = None
+        self.jugador = 1
+
+    def generaTablero(self):
+        
         tablero = []
 
         for i in range(6):
             tablero.append([])
             for j in range(6):
-                tablero[i].append(0)
+                tablero[i].append("0")
 
-        self.tablero=tablero
-        self.completo = False
-        self.ganador = None
-        self.jugador = 1
-    
-    def generar_jugadas_popsibles(self):
-        posibles=[]
-        print("Aún no sé hacer nada")
+        return tablero      
+
+#buscar posibles jugadas
+    def jugadaValida(self, tablero , jugador, x, y):
+
+        #print("fui llamada")
+
+        if jugador == "1":
+            ficha = "1"
+        else:
+            ficha = "-1"
+        
+        if tablero[x][y] != "0":
+            return False
+        else:
+            adyacencia = False
+            adyacencias = []
+
+            for i in range(max(0, x-1), min(x+2,6)):
+                for j in range(max(0,y-1), min(y+2,6)):
+                    if tablero[i][j] != "0":
+                        adyacencia = True
+                        adyacencias.append([i,j])
+            
+            if not adyacencia:
+                return False
+            else:
+
+                booleano = False
+
+                for adyacencia in adyacencias:
+
+                    adyX = adyacencia[0]
+                    adyY = adyacencia[1]
+
+                    if tablero[adyX][adyY] == ficha:
+                        continue
+                    else:
+                        #modulo
+                        varX = adyX - x
+                        varY = adyY - y
+                        estX = adyX
+                        estY = adyY
+
+                        while 0 <= estX <=5 and 0 <= estY <= 5:
+                            if tablero[estX][estY] == "0":
+                                break
+
+                            if tablero[estX][estY] == ficha:
+                                booleano = True
+                                break
+
+                            estX += varX
+                            estY += varY
+                return booleano
+
+
+
+#drama end
 
     def estado_final(self):
         self.evaluar()
