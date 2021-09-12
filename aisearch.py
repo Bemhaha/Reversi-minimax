@@ -10,7 +10,7 @@ class ReversiGame:
         self.ganador = None
         self.jugador = turno
         self.nodos = 0
-        self.profundidadBusqueda = 6
+        #self.profundidadBusqueda = 6
         print(self.tablero)
     
 
@@ -86,7 +86,7 @@ class ReversiGame:
 
 #new drama ia
     
-    def minimax(self):
+    def minimax(self, tableroOriginal, profundidadBusqueda, minOrMax):
         print("idk what i do, but the real thing is, i do nothing xd") 
         self.nodos += 1
         auxTableros = []
@@ -94,21 +94,90 @@ class ReversiGame:
 
         for x in range(6):
             for y in range(6):
-                if self.jugadaValida(self.tablero, "1", x, y):
-                    intentar = self.movimientoAReversear(self.tablero, x, y, "1")
+                if self.jugadaValida(tableroOriginal, "1", x, y):
+                    intentar = self.movimientoAReversear(tableroOriginal, x, y, "1")
                     auxTableros.append(intentar)
                     posibilidades.append([x,y])
         
         #creación árbol 
         # condición de salida
-        if self.profundidadBusqueda == 0 or len(posibilidades) == 0:
-            return ()
-        #derecha e izquierda del arbolito 
+        if profundidadBusqueda == 0 or len(posibilidades) == 0:
+            return ([self.heuristicaMejorEsquina(tableroOriginal, "1", not minOrMax), tableroOriginal])
+        #max o min del arbolito
+        if minOrMax:
+            #max
+            mejorPuntaje = -10000
+            mejorTableroJugar = []
+            for tablero in auxTableros:
+                puntajeAux = self.minimax(tablero, profundidadBusqueda-1, 0)[0]
+                if puntajeAux > mejorPuntaje:
+                    mejorPuntaje = puntajeAux
+                    mejorTableroJugar = tablero
+            return([mejorPuntaje, mejorTableroJugar])
+        else:
+            #min
+            mejorPuntaje = 10000
+            mejorTableroJugar = []
+            for tablero in auxTableros:
+                puntajeAux = self.minimax(tablero, profundidadBusqueda-1, 1)[0]
+                if puntajeAux < mejorPuntaje:
+                    mejorPuntaje = puntajeAux
+                    mejorTableroJugar = tablero
+            return ([mejorPuntaje, mejorTableroJugar])
+
+
 
     #heuristica extraida de un libro 
-    def heuristicaMejorEsquina(self):
+    def heuristicaMejorEsquina(self, tablero, ficha):
         print("holanda que talca")
+
+        puntajeHeuristica = 0
+        puntajeEsquina = 3
+        puntajeAdyacente = 1
+        puntajeLateral = 1
+
+        if ficha == "1":
+            fichaEnemiga = "-1"
+        else:
+            fichaEnemiga = "1"
+
+        for x in range(6):
+            for y in range(6):
+                sumaAux = 1
+                if (x == 0 and y == 1) or (x == 1 and 0 <= y <= 1):
+                    if tablero[0][0] == ficha:
+                        sumaAux = puntajeLateral
+                    else:
+                        sumaAux = -puntajeAdyacente
+                    
+                elif (x == 0 and y == 4) or (x == 1 and 4 <= y <= 5):
+                    if tablero[6][0] == ficha:
+                        sumaAux = puntajeLateral
+                    else:
+                        sumaAux = -puntajeAdyacente
+                elif (x == 5 and y == 1) or (x == 4 and 0 <= y <=1):
+                    if tablero[0][5] == ficha:
+                        sumaAux = puntajeLateral
+                    else:
+                        sumaAux = -puntajeAdyacente
+                elif (x == 5 and y == 4) or (x == 4 and 4 <= y <= 5):
+                    if tablero[5][5] == ficha:
+                        sumaAux = puntajeLateral
+                    else:
+                        sumaAux = -puntajeAdyacente
+                elif (x == 0 and 1 < y < 4) or (x == 5 and 1 < y < 4) or (y == 0 and 1 < x < 4) or (y == 5 and 1<x<4):
+                        sumaAux = puntajeLateral
+                elif (x == 0 and y == 0) or (x == 0 and y == 5) or (x == 5 and y == 0) or (x == 5 and y == 5):
+                    sumaAux = puntajeEsquina
+                
+                if tablero[x][y] == ficha:
+                    puntajeHeuristica += sumaAux
+                elif tablero[x][y] == fichaEnemiga:
+                    puntajeHeuristica -= sumaAux
         
+        print("puntaje ewe -->  ", puntajeHeuristica) 
+        return puntajeHeuristica
+
     def movimientoAReversear(self, tab, x, y, ficha):
 
         newTab = self.copiaTablero(tab)
