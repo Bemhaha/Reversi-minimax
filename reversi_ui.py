@@ -33,7 +33,7 @@ class Reversi:
         self.juego.tablero[3][2] = "1"
         self.botones[2][3]["image"] = self.negro
         self.juego.tablero[2][3] = "1"
-        self.pistas("1")
+        self.actualizacionTablero()
 
     
     def pistas(self, jugador):
@@ -70,9 +70,23 @@ class Reversi:
             return False 
 
 
+    def actualizacionTablero(self):
+
+        for x in range(6):
+            for y in range(6):
+                if self.juego.tablero[x][y] =="0":
+                    self.botones[x][y]["image"] = self.vacio
+                elif self.juego.tablero[x][y] == "-1":
+                    self.botones[x][y]["image"] = self.blanco
+                else:
+                    self.botones[x][y]["image"] = self.negro
+
+        self.pistas("1")
+
+
     def click(self, evento):
         #print("i do nothing")
-        if self.juego.tablero[evento.widget.x][evento.widget.y] == "0":
+        if self.juego.tablero[evento.widget.x][evento.widget.y] == "0" and self.juego.jugadaValida(self.juego.tablero, "1", evento.widget.x, evento.widget.y):
             self.juego.jugar(evento.widget.x, evento.widget.y)
             evento.widget["image"] = self.negro
             print(self.juego.tablero)
@@ -83,6 +97,8 @@ class Reversi:
                 #self.botones[m[1].x][m[1].y]["image"] = self.blanco
                 self.pistas("1")
                 self.victoria()
+        self.actualizacionTablero()
+        #print("terminé uwumt")
 
 
 juego = Reversi()

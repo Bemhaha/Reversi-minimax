@@ -3,12 +3,14 @@ from tkinter.constants import E, FALSE, NO
 
 class ReversiGame:
 
-    def __init__(self, turno = "-1"):
+    def __init__(self, turno = "1"):
 
         self.tablero = self.generaTablero()
         self.completo = False
         self.ganador = None
         self.jugador = turno
+        self.nodos = 0
+        self.profundidadBusqueda = 6
         print(self.tablero)
     
 
@@ -80,9 +82,94 @@ class ReversiGame:
                             auxY += varY
                 return booleano
 
-
-
 #drama end
+
+#new drama ia
+    
+    def minimax(self):
+        print("idk what i do, but the real thing is, i do nothing xd") 
+        self.nodos += 1
+        auxTableros = []
+        posibilidades = []
+
+        for x in range(6):
+            for y in range(6):
+                if self.jugadaValida(self.tablero, "1", x, y):
+                    intentar = self.movimientoAReversear(self.tablero, x, y, "1")
+                    auxTableros.append(intentar)
+                    posibilidades.append([x,y])
+        
+        #creación árbol 
+        # condición de salida
+        if self.profundidadBusqueda == 0 or len(posibilidades) == 0:
+            return ()
+        #derecha e izquierda del arbolito 
+
+    #heuristica extraida de un libro 
+    def heuristicaMejorEsquina(self):
+        print("holanda que talca")
+        
+    def movimientoAReversear(self, tab, x, y, ficha):
+
+        newTab = self.copiaTablero(tab)
+
+        newTab[x][y] = ficha
+
+        adyacentes = []
+
+        for i in range(max(0,x-1),min(x+2,6)):
+            for j in range(max(0,y-1),min(y+2,8)):
+                if newTab[i][j] != "0":
+                    adyacentes.append([i, j])
+        
+        reversear = []
+
+        for adyacente in adyacentes:
+            adyX = adyacentes[0]
+            adyY = adyacente[1]
+
+            if newTab[adyX][adyY] != ficha:
+
+                caminoAReversear = []
+
+                varX = adyX - x
+                varY = adyY - y
+                auxX = adyX
+                auxY = adyY
+
+                while 0 <= auxX <= 5 and 0 <= auxY <= 5:
+                    caminoAReversear.append([auxX, auxY])
+                    evaluar = newTab[adyX][adyY]
+
+                    if evaluar == "0":
+                        break
+
+                    if evaluar == ficha:
+                        for nodo in caminoAReversear:
+                            reversear.append(nodo)
+                        break
+
+                    auxX += varX
+                    auxY += varY
+        
+        for nodo in reversear:
+            newTab[nodo[0]][nodo[1]] == ficha
+        
+        return newTab
+
+        
+
+    
+    def copiaTablero(self, tab):
+        newTab = self.generaTablero()
+
+        for x in range(6):
+            for y in range(6):
+                newTab[x][y] = tab[x][y]
+        
+        return newTab
+
+#new drama ia end
 
     def estado_final(self):
         self.evaluar()
