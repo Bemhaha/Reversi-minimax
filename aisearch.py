@@ -86,11 +86,12 @@ class ReversiGame:
 
 #new drama ia
     
-    def minimax(self, tableroOriginal, profundidadBusqueda, minOrMax):
+    def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
         print("idk what i do, but the real thing is, i do nothing xd") 
         self.nodos += 1
         auxTableros = []
         posibilidades = []
+        print("llamadoMinMax")
 
         for x in range(6):
             for y in range(6):
@@ -102,14 +103,14 @@ class ReversiGame:
         #creación árbol 
         # condición de salida
         if profundidadBusqueda == 0 or len(posibilidades) == 0:
-            return ([self.heuristicaMejorEsquina(tableroOriginal, "1", not minOrMax), tableroOriginal])
+            return ([self.heuristicaMejorEsquina(tableroOriginal, "1", 1 - minOrMax), tableroOriginal])
         #max o min del arbolito
         if minOrMax:
             #max
             mejorPuntaje = -10000
             mejorTableroJugar = []
             for tablero in auxTableros:
-                puntajeAux = self.minimax(tablero, profundidadBusqueda-1, 0)[0]
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)[0]
                 if puntajeAux > mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
@@ -119,7 +120,7 @@ class ReversiGame:
             mejorPuntaje = 10000
             mejorTableroJugar = []
             for tablero in auxTableros:
-                puntajeAux = self.minimax(tablero, profundidadBusqueda-1, 1)[0]
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)[0]
                 if puntajeAux < mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
@@ -238,6 +239,8 @@ class ReversiGame:
         
         return newTab
 
+    
+
 #new drama ia end
 
     def estado_final(self):
@@ -258,5 +261,5 @@ class ReversiGame:
         self.jugador *= -1 #ni idea que hace esto jaja
         
 
-    def minimax(juego, etapa, secuencia, secuencias):
+    def minimaxReversi(juego, etapa, secuencia, secuencias):
         print("aun no sé jugar bai")

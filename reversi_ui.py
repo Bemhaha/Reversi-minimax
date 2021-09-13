@@ -34,7 +34,6 @@ class Reversi:
         self.botones[2][3]["image"] = self.negro
         self.juego.tablero[2][3] = "1"
         self.actualizacionTablero()
-
     
     def pistas(self, jugador):
 
@@ -98,7 +97,9 @@ class Reversi:
                 self.pistas("1")
                 self.victoria()
         self.actualizacionTablero()
-        #print("terminé uwumt")
+        variable = self.juego.minimaxReversi(self.juego.tablero, 5, 1)
+        print(variable[0])
+        print("terminé uwumt")
 
 
 juego = Reversi()
