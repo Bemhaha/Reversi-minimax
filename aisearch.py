@@ -87,31 +87,42 @@ class ReversiGame:
 #new drama ia
     
     def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
-        print("idk what i do, but the real thing is, i do nothing xd") 
         self.nodos += 1
         auxTableros = []
         posibilidades = []
-        print("llamadoMinMax")
+        
+        print("soy minimax")
 
         for x in range(6):
             for y in range(6):
                 if self.jugadaValida(tableroOriginal, "1", x, y):
                     intentar = self.movimientoAReversear(tableroOriginal, x, y, "1")
                     auxTableros.append(intentar)
+                    print("vamos a intentar esto: ")
+                    print(intentar)
                     posibilidades.append([x,y])
+        
         
         #creación árbol 
         # condición de salida
         if profundidadBusqueda == 0 or len(posibilidades) == 0:
-            return ([self.heuristicaMejorEsquina(tableroOriginal, "1", 1 - minOrMax), tableroOriginal])
+            
+            if minOrMax == "1":
+                fichaAux = "1"
+            else:
+                fichaAux = "-1"
+
+            return ([self.heuristicaMejorEsquina(tableroOriginal, fichaAux), tableroOriginal])
         #max o min del arbolito
         if minOrMax:
             #max
             mejorPuntaje = -10000
             mejorTableroJugar = []
+            print(len(auxTableros))
             for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)[0]
-                if puntajeAux > mejorPuntaje:
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)
+                print("puntaje Aux ", puntajeAux)
+                if puntajeAux[0] > mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
             return([mejorPuntaje, mejorTableroJugar])
@@ -119,9 +130,11 @@ class ReversiGame:
             #min
             mejorPuntaje = 10000
             mejorTableroJugar = []
+            print(len(auxTableros))
             for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)[0]
-                if puntajeAux < mejorPuntaje:
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)
+                print(puntajeAux)
+                if puntajeAux[0] < mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
             return ([mejorPuntaje, mejorTableroJugar])
@@ -133,9 +146,9 @@ class ReversiGame:
         print("holanda que talca")
 
         puntajeHeuristica = 0
-        puntajeEsquina = 3
-        puntajeAdyacente = 1
-        puntajeLateral = 1
+        puntajeEsquina = 25
+        puntajeAdyacente = 5
+        puntajeLateral = 5
 
         if ficha == "1":
             fichaEnemiga = "-1"
@@ -152,7 +165,7 @@ class ReversiGame:
                         sumaAux = -puntajeAdyacente
                     
                 elif (x == 0 and y == 4) or (x == 1 and 4 <= y <= 5):
-                    if tablero[6][0] == ficha:
+                    if tablero[5][0] == ficha:
                         sumaAux = puntajeLateral
                     else:
                         sumaAux = -puntajeAdyacente
@@ -187,16 +200,17 @@ class ReversiGame:
 
         adyacentes = []
 
-        for i in range(max(0,x-1),min(x+2,6)):
-            for j in range(max(0,y-1),min(y+2,8)):
+        for i in range(max(0,x-1),min(x+2,5)):
+            for j in range(max(0,y-1),min(y+2,5)):
                 if newTab[i][j] != "0":
                     adyacentes.append([i, j])
         
         reversear = []
 
+        print(adyacentes)
         for adyacente in adyacentes:
-            adyX = adyacentes[0]
-            adyY = adyacente[1]
+            adyX = int(adyacente[0])
+            adyY = int(adyacente[1])
 
             if newTab[adyX][adyY] != ficha:
 
@@ -238,8 +252,6 @@ class ReversiGame:
                 newTab[x][y] = tab[x][y]
         
         return newTab
-
-    
 
 #new drama ia end
 

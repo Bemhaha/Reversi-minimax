@@ -25,6 +25,7 @@ class Reversi:
                 fila.append(b1)
             self.botones.append(fila)
         
+        
         self.botones[2][2]["image"] = self.blanco
         self.juego.tablero[2][2] = "-1"
         self.botones[3][3]["image"] = self.blanco
@@ -98,7 +99,9 @@ class Reversi:
                 self.victoria()
         self.actualizacionTablero()
         variable = self.juego.minimaxReversi(self.juego.tablero, 5, 1)
-        print(variable[0])
+        print(self.juego.heuristicaMejorEsquina(self.juego.tablero, "1"))
+        print(variable)
+        print(self.juego.movimientoAReversear(self.juego.tablero, 2,3,"-1"))
         print("terminé uwumt")
 
 
