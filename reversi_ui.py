@@ -34,7 +34,7 @@ class Reversi:
         self.juego.tablero[3][2] = "1"
         self.botones[2][3]["image"] = self.negro
         self.juego.tablero[2][3] = "1"
-        self.actualizacionTablero()
+        self.actualizacionTablero(self.juego.tablero)
     
     def pistas(self, jugador):
 
@@ -70,16 +70,16 @@ class Reversi:
             return False 
 
 
-    def actualizacionTablero(self):
+    def actualizacionTablero(self, tablero):
 
         for x in range(6):
             for y in range(6):
-                if self.juego.tablero[x][y] =="0":
-                    self.botones[x][y]["image"] = self.vacio
-                elif self.juego.tablero[x][y] == "-1":
+                if tablero[x][y] == "1":
+                    self.botones[x][y]["image"] = self.negro
+                elif tablero[x][y] == "-1":
                     self.botones[x][y]["image"] = self.blanco
                 else:
-                    self.botones[x][y]["image"] = self.negro
+                    self.botones[x][y]["image"] = self.vacio
 
         self.pistas("1")
 
@@ -97,11 +97,11 @@ class Reversi:
                 #self.botones[m[1].x][m[1].y]["image"] = self.blanco
                 self.pistas("1")
                 self.victoria()
-        self.actualizacionTablero()
-        variable = self.juego.minimaxReversi(self.juego.tablero, "5", "1")
-        print(self.juego.heuristicaMejorEsquina(self.juego.tablero, -1))
-        print(variable)
-        print(self.juego.movimientoAReversear(self.juego.tablero, 2,3,"-1"))
+        self.juego.tablero = self.juego.minimaxReversi(self.juego.tablero, 5, 1)[1]
+        #print(self.juego.heuristicaMejorEsquina(self.juego.tablero, -1))
+        #print("camino ", variable[1])
+        #print(self.juego.movimientoAReversear(self.juego.tablero, 2,3,"-1"))
+        self.actualizacionTablero(self.juego.tablero)
         print("terminé uwumt")
 
 

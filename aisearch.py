@@ -229,7 +229,7 @@ class ReversiGame:
             for tablero in auxTableros:
                 puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)[0]
                 print("puntaje Aux ", puntajeAux)
-                if puntajeAux[0] > mejorPuntaje:
+                if puntajeAux > mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
             return([mejorPuntaje, mejorTableroJugar])
@@ -241,7 +241,7 @@ class ReversiGame:
             for tablero in auxTableros:
                 puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)[0]
                 print(puntajeAux)
-                if puntajeAux[0] < mejorPuntaje:
+                if puntajeAux < mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = tablero
             return ([mejorPuntaje, mejorTableroJugar])
@@ -268,6 +268,3 @@ class ReversiGame:
         self.tablero[jugadax][jugaday] = self.jugador
         self.jugador *= -1 #ni idea que hace esto jaja
         
-
-    def minimaxReversi(juego, etapa, secuencia, secuencias):
-        print("aun no sé jugar bai")
