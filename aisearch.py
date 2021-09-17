@@ -86,7 +86,7 @@ class ReversiGame:
 
     #heuristica extraida de un libro 
     def heuristicaMejorEsquina(self, tablero, ficha):
-        print("holanda que talca")
+        #print("holanda que talca")
 
         puntajeHeuristica = 0
         puntajeEsquina = 25
@@ -153,7 +153,7 @@ class ReversiGame:
         
         reversear = []
 
-        print(adyacentes)
+        #print(adyacentes)
         for adyacente in adyacentes:
             adyX = int(adyacente[0])
             adyY = int(adyacente[1])
@@ -169,7 +169,7 @@ class ReversiGame:
 
                 while 0 <= auxX <= 5 and 0 <= auxY <= 5:
                     caminoAReversear.append([auxX, auxY])
-                    evaluar = newTab[adyX][adyY]
+                    evaluar = newTab[auxX][auxY]
 
                     if evaluar == "0":
                         break
@@ -182,9 +182,15 @@ class ReversiGame:
                     auxX += varX
                     auxY += varY
         
+        #print("Camino a reversear = ", caminoAReversear)
+        #print("lista de nodos a reversear = ", reversear)
         for nodo in reversear:
-            newTab[nodo[0]][nodo[1]] == ficha
+            #print("vamos a añadir = ", nodo)
+            newTab[nodo[0]][nodo[1]] = ficha
+            #print("nuevo nodo la ficha es = ", newTab[nodo[0]][nodo[1]] )
         
+        #print("Tablero Reverseado = ", newTab)
+
         return newTab
     
     def copiaTablero(self, tab):
@@ -204,15 +210,15 @@ class ReversiGame:
         auxTableros = []
         posibilidades = []
         
-        print("soy minimax")
+        #print("soy minimax")
 
         for x in range(6):
             for y in range(6):
                 if self.jugadaValida(self.tablero, "-1", x, y):
                     intentar = self.movimientoAReversear(tableroOriginal, x, y, "-1")
                     auxTableros.append(intentar)
-                    print("vamos a intentar esto: ")
-                    print(intentar)
+                    #print("vamos a intentar esto: ")
+                    #print(intentar)
                     posibilidades.append([x,y])
         
         
@@ -225,26 +231,26 @@ class ReversiGame:
             #max
             mejorPuntaje = -10000
             mejorTableroJugar = []
-            print(len(auxTableros))
-            for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)[0]
-                print("puntaje Aux ", puntajeAux)
+            #print(len(auxTableros))
+            for i in range(len(auxTableros)):
+                puntajeAux = self.minimaxReversi(auxTableros[i], profundidadBusqueda-1, 0)[0]
+                #print("puntaje Aux ", puntajeAux)
                 if puntajeAux > mejorPuntaje:
                     mejorPuntaje = puntajeAux
-                    mejorTableroJugar = tablero
-            return([mejorPuntaje, mejorTableroJugar])
+                    mejorTableroJugar = auxTableros[i]
+            return([mejorPuntaje, mejorTableroJugar, posibilidades[i]])
         else:
             #min
             mejorPuntaje = 10000
             mejorTableroJugar = []
-            print(len(auxTableros))
-            for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)[0]
-                print(puntajeAux)
+            #print(len(auxTableros))
+            for i in range(len(auxTableros)):
+                puntajeAux = self.minimaxReversi(auxTableros[i], profundidadBusqueda-1, 1)[0]
+                #print(puntajeAux)
                 if puntajeAux < mejorPuntaje:
                     mejorPuntaje = puntajeAux
-                    mejorTableroJugar = tablero
-            return ([mejorPuntaje, mejorTableroJugar])
+                    mejorTableroJugar = auxTableros[i]
+            return ([mejorPuntaje, mejorTableroJugar, posibilidades[i]])
 
 
 

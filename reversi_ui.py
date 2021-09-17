@@ -78,7 +78,7 @@ class Reversi:
                     self.botones[x][y]["image"] = self.negro
                 elif tablero[x][y] == "-1":
                     self.botones[x][y]["image"] = self.blanco
-                else:
+                elif tablero[x][y] == "0":
                     self.botones[x][y]["image"] = self.vacio
 
         self.pistas("1")
@@ -88,21 +88,26 @@ class Reversi:
         #print("i do nothing")
         if self.juego.tablero[evento.widget.x][evento.widget.y] == "0" and self.juego.jugadaValida(self.juego.tablero, "1", evento.widget.x, evento.widget.y):
             self.juego.jugar(evento.widget.x, evento.widget.y)
+            #print("x = ", evento.widget.x, " y= ", evento.widget.y)
+            self.juego.tablero = self.juego.movimientoAReversear(self.juego.tablero, evento.widget.x, evento.widget.y, "1")
             evento.widget["image"] = self.negro
-            print(self.juego.tablero)
+            self.actualizacionTablero(self.juego.tablero)
+            
+            #print(self.juego.tablero)
             if not self.victoria():
-                #o = []
-                #m = aisearch.minimax(juego, 1, [], o)
-                #self.juego.jugar(m[1].x, m[1].y)
-                #self.botones[m[1].x][m[1].y]["image"] = self.blanco
+
                 self.pistas("1")
                 self.victoria()
-        self.juego.tablero = self.juego.minimaxReversi(self.juego.tablero, 5, 1)[1]
+        
+        resMinmax = self.juego.minimaxReversi(self.juego.tablero, 4, 1)
         #print(self.juego.heuristicaMejorEsquina(self.juego.tablero, -1))
         #print("camino ", variable[1])
         #print(self.juego.movimientoAReversear(self.juego.tablero, 2,3,"-1"))
+        self.juego.tablero = resMinmax[1]
         self.actualizacionTablero(self.juego.tablero)
-        print("terminé uwumt")
+        #print("tupla que jugó minimax = ", resMinmax[2])
+        #print("terminé uwumt")
+        #print(self.juego.tablero)
 
 
 juego = Reversi()
