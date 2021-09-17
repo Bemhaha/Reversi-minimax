@@ -1,6 +1,7 @@
 import aisearch
 from tkinter import *
 from tkinter import messagebox
+import time
 
 class Reversi:
 
@@ -51,24 +52,34 @@ class Reversi:
 
         
 
-    def victoria(self):
-        if self.juego.estado_final():
-            if self.juego.ganador == 1:
-                messagebox.showinfo("Reversi", "has ganado")
-            elif self.juego.ganador == 0:
-                messagebox.showinfo("Reversi", "Empate")
+    def victoria(self, tablero):
+        if self.juego.estadoFinal(tablero):
+            print("Estamos en estado final = ", self.juego.estadoFinal(tablero))
+            print("el ganador es = ", self.juego.ganador)
+            if self.juego.ganador == "1":
+                messagebox.showinfo("Reversi Game", "Has Ganado")
+            elif self.juego.ganador == "0":
+                messagebox.showinfo("Reversi Game", "Empate!")
             else:
-                messagebox.showinfo("Reversi", "Has perdido")
-            self.juego.reiniciar()
-
+                messagebox.showinfo("Reversi Game", "Has perdido!")
+            
+            self.juego.reinciar()
             for i in range(6):
                 for j in range(6):
                     self.botones[i][j]["image"] = self.vacio
-
+            self.botones[2][2]["image"] = self.blanco
+            self.juego.tablero[2][2] = "-1"
+            self.botones[3][3]["image"] = self.blanco
+            self.juego.tablero[3][3] = "-1"
+            self.botones[3][2]["image"] = self.negro
+            self.juego.tablero[3][2] = "1"
+            self.botones[2][3]["image"] = self.negro
+            self.juego.tablero[2][3] = "1"
+            self.actualizacionTablero(self.juego.tablero)
+            self.pistas("1")
             return True
-        else:
-            return False 
-
+        else: 
+            return False
 
     def actualizacionTablero(self, tablero):
 
@@ -92,23 +103,16 @@ class Reversi:
             self.juego.tablero = self.juego.movimientoAReversear(self.juego.tablero, evento.widget.x, evento.widget.y, "1")
             evento.widget["image"] = self.negro
             self.actualizacionTablero(self.juego.tablero)
+            time.sleep(1)
             
             #print(self.juego.tablero)
-            if not self.victoria():
-
+            if not self.victoria(self.juego.tablero):
+                resMinmax = self.juego.minimaxReversi(self.juego.tablero, 4, 1)
+                self.juego.tablero = resMinmax[1]
+                self.actualizacionTablero(self.juego.tablero)
                 self.pistas("1")
-                self.victoria()
-        
-        resMinmax = self.juego.minimaxReversi(self.juego.tablero, 4, 1)
-        #print(self.juego.heuristicaMejorEsquina(self.juego.tablero, -1))
-        #print("camino ", variable[1])
-        #print(self.juego.movimientoAReversear(self.juego.tablero, 2,3,"-1"))
-        self.juego.tablero = resMinmax[1]
-        self.actualizacionTablero(self.juego.tablero)
-        #print("tupla que jugó minimax = ", resMinmax[2])
-        #print("terminé uwumt")
-        #print(self.juego.tablero)
-
+                #print("tablero = ", self.juego.tablero)
+                self.victoria(self.juego.tablero)
 
 juego = Reversi()
 mainloop()

@@ -20,7 +20,7 @@ class ReversiGame:
         self.tablero= self.generaTablero()
         self.completo = False
         self.ganador = None
-        self.jugador = 1
+        self.jugador = "1"
 
     def generaTablero(self):
         
@@ -32,7 +32,50 @@ class ReversiGame:
                 tablero[i].append("0")
 
         return tablero      
+    
+    def estadoFinal(self, tablero):
+        self.evaluar()
+        #print("aca en estado final = ", self.ganador)
 
+        if self.completo:
+            #print("TRUE")
+            return True
+        else:
+            #print("FALSE")
+            return False
+
+
+    
+    def evaluar(self):
+        
+        suma = 0
+        #print("Vamos a evaluar")
+        #print("hay ceros?= ", '0' not in self.tablero)
+
+        estado = False
+
+        for x in range(6):
+            for y in range(6):
+                if self.tablero[x][y] == "0":
+                    estado = True
+
+        if not estado:
+            self.completo = True
+            for i in range (6):
+                for j in range(6):
+                    suma += int(self.tablero[i][j])
+        
+            if suma > 0:
+                self.ganador = "1"
+            elif suma < 0:
+                self.ganador = "-1"
+            else:
+                self.ganador = "0"
+        else:
+            self.completo = False
+
+        
+            
 #buscar posibles jugadas
     def jugadaValida(self, tablero , ficha, x, y):
 
@@ -256,19 +299,6 @@ class ReversiGame:
 
 
 #new drama ia end
-
-    def estado_final(self):
-        self.evaluar()
-        if self.ganador is not None or self.completo:
-            return True
-        else:
-            return False
-    
-    def evaluar(self):
-        print("aun no hago nada jaja salu2")
-    
-    def calcular_utilidad(self):
-        return self.ganador
     
     def jugar(self, jugadax, jugaday):
         self.tablero[jugadax][jugaday] = self.jugador
