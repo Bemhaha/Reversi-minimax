@@ -84,63 +84,6 @@ class ReversiGame:
 
 #drama end
 
-#new drama ia
-    
-    def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
-        self.nodos += 1
-        auxTableros = []
-        posibilidades = []
-        
-        print("soy minimax")
-
-        for x in range(6):
-            for y in range(6):
-                if self.jugadaValida(tableroOriginal, "1", x, y):
-                    intentar = self.movimientoAReversear(tableroOriginal, x, y, "1")
-                    auxTableros.append(intentar)
-                    print("vamos a intentar esto: ")
-                    print(intentar)
-                    posibilidades.append([x,y])
-        
-        
-        #creación árbol 
-        # condición de salida
-        if profundidadBusqueda == 0 or len(posibilidades) == 0:
-            
-            if minOrMax == "1":
-                fichaAux = "1"
-            else:
-                fichaAux = "-1"
-
-            return ([self.heuristicaMejorEsquina(tableroOriginal, fichaAux), tableroOriginal])
-        #max o min del arbolito
-        if minOrMax:
-            #max
-            mejorPuntaje = -10000
-            mejorTableroJugar = []
-            print(len(auxTableros))
-            for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)
-                print("puntaje Aux ", puntajeAux)
-                if puntajeAux[0] > mejorPuntaje:
-                    mejorPuntaje = puntajeAux
-                    mejorTableroJugar = tablero
-            return([mejorPuntaje, mejorTableroJugar])
-        else:
-            #min
-            mejorPuntaje = 10000
-            mejorTableroJugar = []
-            print(len(auxTableros))
-            for tablero in auxTableros:
-                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)
-                print(puntajeAux)
-                if puntajeAux[0] < mejorPuntaje:
-                    mejorPuntaje = puntajeAux
-                    mejorTableroJugar = tablero
-            return ([mejorPuntaje, mejorTableroJugar])
-
-
-
     #heuristica extraida de un libro 
     def heuristicaMejorEsquina(self, tablero, ficha):
         print("holanda que talca")
@@ -150,9 +93,11 @@ class ReversiGame:
         puntajeAdyacente = 5
         puntajeLateral = 5
 
-        if ficha == "1":
+        if ficha == 1:
+            ficha = "1"
             fichaEnemiga = "-1"
         else:
+            ficha = "-1"
             fichaEnemiga = "1"
 
         for x in range(6):
@@ -183,13 +128,14 @@ class ReversiGame:
                         sumaAux = puntajeLateral
                 elif (x == 0 and y == 0) or (x == 0 and y == 5) or (x == 5 and y == 0) or (x == 5 and y == 5):
                     sumaAux = puntajeEsquina
-                
+                #print("sumaaux ", sumaAux)
                 if tablero[x][y] == ficha:
                     puntajeHeuristica += sumaAux
                 elif tablero[x][y] == fichaEnemiga:
                     puntajeHeuristica -= sumaAux
-        
-        print("puntaje ewe -->  ", puntajeHeuristica) 
+                #print("puntajeheuristica", puntajeHeuristica)
+        #print("suma aux: ", sumaAux)
+        #print("puntaje ewe -->  ", puntajeHeuristica) 
         return puntajeHeuristica
 
     def movimientoAReversear(self, tab, x, y, ficha):
@@ -240,9 +186,6 @@ class ReversiGame:
             newTab[nodo[0]][nodo[1]] == ficha
         
         return newTab
-
-        
-
     
     def copiaTablero(self, tab):
         newTab = self.generaTablero()
@@ -252,6 +195,59 @@ class ReversiGame:
                 newTab[x][y] = tab[x][y]
         
         return newTab
+
+#new drama ia
+
+    def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
+        
+        self.nodos += 1
+        auxTableros = []
+        posibilidades = []
+        
+        print("soy minimax")
+
+        for x in range(6):
+            for y in range(6):
+                if self.jugadaValida(self.tablero, "-1", x, y):
+                    intentar = self.movimientoAReversear(tableroOriginal, x, y, "-1")
+                    auxTableros.append(intentar)
+                    print("vamos a intentar esto: ")
+                    print(intentar)
+                    posibilidades.append([x,y])
+        
+        
+        #creación árbol 
+        # condición de salida
+        if profundidadBusqueda == 0 or len(posibilidades) == 0:
+            return ([self.heuristicaMejorEsquina(tableroOriginal, 1-minOrMax), tableroOriginal])
+        #max o min del arbolito
+        if minOrMax:
+            #max
+            mejorPuntaje = -10000
+            mejorTableroJugar = []
+            print(len(auxTableros))
+            for tablero in auxTableros:
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 0)[0]
+                print("puntaje Aux ", puntajeAux)
+                if puntajeAux[0] > mejorPuntaje:
+                    mejorPuntaje = puntajeAux
+                    mejorTableroJugar = tablero
+            return([mejorPuntaje, mejorTableroJugar])
+        else:
+            #min
+            mejorPuntaje = 10000
+            mejorTableroJugar = []
+            print(len(auxTableros))
+            for tablero in auxTableros:
+                puntajeAux = self.minimaxReversi(tablero, profundidadBusqueda-1, 1)[0]
+                print(puntajeAux)
+                if puntajeAux[0] < mejorPuntaje:
+                    mejorPuntaje = puntajeAux
+                    mejorTableroJugar = tablero
+            return ([mejorPuntaje, mejorTableroJugar])
+
+
+
 
 #new drama ia end
 
