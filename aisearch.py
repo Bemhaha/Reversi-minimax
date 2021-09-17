@@ -10,7 +10,7 @@ class ReversiGame:
         self.ganador = None
         self.jugador = turno
         self.nodos = 0
-        #self.profundidadBusqueda = 6
+        self.profundidadBusqueda = 1
         print(self.tablero)
     
 

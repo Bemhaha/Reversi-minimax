@@ -7,6 +7,7 @@ class Reversi:
 
     def __init__(self):
         self.principal = Tk()
+        self.menu = Tk()
         self.principal.title("Reversi")
         self.botones=[]
         self.negro = PhotoImage(file="negro.png")
@@ -14,6 +15,34 @@ class Reversi:
         self.vacio = PhotoImage(file="vacio.png")
         self.sugerencia = PhotoImage(file="sugerencia.png")
         self.juego = aisearch.ReversiGame()
+        #self.iniciarReversi(3)
+
+        #print("vamos a crear los botones")
+        self.pregunta = Label(self.menu, text="Seleccione dificultad")
+        self.facil = Button(self.menu, text="Fácil", command= self.iniciarReversiF)
+        self.normal = Button(self.menu, text="Normal", command= self.iniciarReversiN)
+        self.dificil = Button(self.menu, text="Dificíl", command= self.iniciarReversiD)
+        self.pregunta.pack()
+        self.facil.pack()
+        self.normal.pack()
+        self.dificil.pack()
+        #print("terminé los botones")
+        
+    def iniciarReversiF(self):
+        self.menu.destroy()
+        self.iniciarReversi(2)
+
+    def iniciarReversiN(self):
+        self.menu.destroy()
+        self.iniciarReversi(3)
+    
+    def iniciarReversiD(self):
+        self.menu.destroy()
+        self.iniciarReversi(4)
+
+    def iniciarReversi(self, dificultad):
+
+        self.juego.profundidadBusqueda = dificultad
 
         for i in range(6):
             fila=[]
@@ -107,7 +136,7 @@ class Reversi:
             
             #print(self.juego.tablero)
             if not self.victoria(self.juego.tablero):
-                resMinmax = self.juego.minimaxReversi(self.juego.tablero, 4, 1)
+                resMinmax = self.juego.minimaxReversi(self.juego.tablero, self.juego.profundidadBusqueda, 1)
                 self.juego.tablero = resMinmax[1]
                 self.actualizacionTablero(self.juego.tablero)
                 self.pistas("1")
