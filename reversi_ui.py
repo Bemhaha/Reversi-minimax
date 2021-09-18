@@ -1,6 +1,7 @@
 import aisearch
 from tkinter import *
 from tkinter import messagebox
+import time
 
 
 class Reversi:
@@ -170,10 +171,24 @@ class Reversi:
             
             #preguntamos si estamos es estado de Victoria
             if not self.victoria(self.juego.tablero):
+
+                #aquí inciamos el conteo de tiempo de ejecución 
+                tiempo = time.time()
+
                 #llamamos a Minimax de Reversi, para que haga su mejor jugada, en este caso, será la jugada de fichas blancas de la computadora
                 resMinmax = self.juego.minimaxReversi(self.juego.tablero, self.juego.profundidadBusqueda, 1)
                 #Minimax nos retornará un tablero con su jugada y fichas reverseadas, así que actualizamos el tablero main del juego
                 self.juego.tablero = resMinmax[1]
+
+                #acá ponemos fin al conteo de tiempo de ejecución
+                tiempoFin = time.time()
+
+                #mostrar por consola la cantidad de nodos buscados y el tiempo que tardó 
+                print("La cantidad de nodos explorados por minimax fueron = ", str(self.juego.nodos))
+                print("El tiempo que tardó minimax en explorar los nos fue de = ", str(tiempoFin - tiempo), " segundos")
+                self.juego.nodos = 0 #restauramos el contador de nodos
+
+
                 #actualizamos lo que mostramos al usuario por la interfaz gráfica según como jugó la computadora o minimax
                 self.actualizacionTablero(self.juego.tablero)
                 #imprimimos las nuevas pistas al usuario
