@@ -131,7 +131,7 @@ class ReversiGame:
                 #se retorna el booleano, si es valida la jugada será TRUE, en caso contrario FALSE
                 return booleano
 
-    #Heuristica que evalua con un puntaje la jugada de un posible tablero futuro elegido para MiniMax
+    #Heuristica que evalua con un puntaje un posible tablero futuro elegido por MiniMax
     def heuristicaMejorEsquina(self, tablero, ficha):
 
         #Iniciamos el puntaje total en 0, además de dar puntaje a las posibles jugadas, esta heuristica se basa en que las mejores jugadas son las esquinas
@@ -262,12 +262,17 @@ class ReversiGame:
         #retornamos el nuevo tablero con las celdas copiadas
         return newTab
 
+    #metodo de busqueda de jugada MINIMAX 
     def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
         
+        #contador de nodos creados
         self.nodos += 1
+        #tableros creados
         auxTableros = []
+        #jugadas posibles
         posibilidades = []
 
+        #primero creamos 2 listas, una con matrices de tableros posibles, otra con posibles jugadas, destacar que los indices corresponden a las jugadas y su tablero
         for x in range(6):
             for y in range(6):
                 if self.jugadaValida(self.tablero, "-1", x, y):
@@ -276,36 +281,55 @@ class ReversiGame:
                     posibilidades.append([x,y])
         
         
-        #creación árbol 
-        # condición de salida
+        #Comenzamos la creación del árbol
+
+        # condición de salida, lo que indicia que llegamos a un nodo terminal en el arbol de tableros de busqueda
         if profundidadBusqueda == 0 or len(posibilidades) == 0:
-            return ([self.heuristicaMejorEsquina(tableroOriginal, 1-minOrMax), tableroOriginal])
+            return ([self.heuristicaMejorEsquina(tableroOriginal, 1-minOrMax), tableroOriginal]) #se retorna el puntaje del tablero, en conjunto a sus tablero
+        
+        
         #max o min del arbolito
         if minOrMax:
             #max
-            mejorPuntaje = -10000
-            mejorTableroJugar = []
-            #print(len(auxTableros))
+            #si el booleano minOrMax es 1, siginifica que maximizaremos la jugada elegida, ya que será MAX quien está en juego
+            mejorPuntaje = -10000 #inciamos el mejor puntaje como -infinito
+            mejorTableroJugar = [] #lista con los tableros mejores para jugar
+
+            #ciclo que crea los siguientes nodos del minimax, aleternando minOrMax
             for i in range(len(auxTableros)):
+                #llamamos recursivamente a minimax y extraemos su puntaje para evaluar si es la jugada con la maxima cantidad de puntos posibles
                 puntajeAux = self.minimaxReversi(auxTableros[i], profundidadBusqueda-1, 0)[0]
-                #print("puntaje Aux ", puntajeAux)
+                
+                #evaluamos si el tablero jugado da la maxima utilidad/puntaje, si es así, lo guardamos en el mejorTablero
                 if puntajeAux > mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = auxTableros[i]
-            return([mejorPuntaje, mejorTableroJugar, posibilidades[i]])
+            
+            #se retorna el tablero dela mejor jugada en conjunto a su puntaje o utilidad
+            return([mejorPuntaje, mejorTableroJugar])
         else:
             #min
-            mejorPuntaje = 10000
-            mejorTableroJugar = []
+            #si el booleano minOrMax es 0, significa que minimizaremos la jugada elegida, ya que será MIN quien está en juego
+            mejorPuntaje = 10000 #iniciamos el mejor puntaje como + infiinito
+            mejorTableroJugar = [] #lista con los tableros de menor utilidad o puntaje
+
+            #ciclo que crea los siguientes nodos del minimax, alternado minOrMax
             for i in range(len(auxTableros)):
+                #llamamos recursivamente a minimax y extraemos su puntaje para evaluar si la jugada minimiza la cantidad de puntos o utilidad
                 puntajeAux = self.minimaxReversi(auxTableros[i], profundidadBusqueda-1, 1)[0]
+
+                #evaluamos si el tablero jugado minimiza la utilidad/puntaje, si es así, lo guardamos en el mejorTablero
                 if puntajeAux < mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = auxTableros[i]
-            return ([mejorPuntaje, mejorTableroJugar, posibilidades[i]])
 
-    
+            #se retorna el tablero de la mejor jugada en conjunto de su utilidad
+            return ([mejorPuntaje, mejorTableroJugar])
+
+    #funciona que se encarga de que el "humano" pueda realizar su jugada
     def jugar(self, jugadax, jugaday):
+        #se realiza en tablero la jugada del "humano"
         self.tablero[jugadax][jugaday] = self.jugador
-        self.jugador *= -1 #ni idea que hace esto jaja salu2
+        #se alterna el jugador
+        self.jugador *= -1 
         

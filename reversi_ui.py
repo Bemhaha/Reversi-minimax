@@ -6,38 +6,55 @@ import time
 class Reversi:
 
     def __init__(self):
+        #se crea un atributo para más adelante instanciar un TK()
         self.principal = NONE
+        #Se instancia un TK() para elegir la dificultad del juego
         self.menu = Tk()
+        #se instancia la "ia" del juego
         self.juego = aisearch.ReversiGame()
-        #self.iniciarReversi(3)
 
-        #print("vamos a crear los botones")
+        #Se preparan los datos para el TK menú y así poder elegir la dificultad
         self.pregunta = Label(self.menu, text="Seleccione dificultad")
         self.facil = Button(self.menu, text="Fácil", command= self.iniciarReversiF)
         self.normal = Button(self.menu, text="Normal", command= self.iniciarReversiN)
         self.dificil = Button(self.menu, text="Dificíl", command= self.iniciarReversiD)
+
+        #se hace pack al TK menú para poder mostrar en la interfaz la elección de dificultad
         self.pregunta.pack()
         self.facil.pack()
         self.normal.pack()
         self.dificil.pack()
-        #print("terminé los botones")
-        
+    
+    #si el usuario toca el recuerdo de "facil", se iniciará el juego con una profundidad de busqueda 2
     def iniciarReversiF(self):
+        #se destruye el tk para poder iniciar el tk del maingame
         self.menu.destroy()
+        #se inicia el juego con dificultado 2
         self.iniciarReversi(2)
 
+    #si el usuario toca el recuerdo de "normal", se iniciará el juego con una profundidad de busqueda 3
     def iniciarReversiN(self):
+        #se destruye el tk para poder iniciar el tk del maingam
         self.menu.destroy()
+        #se inicia el juego con dificultado 3
         self.iniciarReversi(3)
     
+    #si el usuario toca el recuerdo de "dificil", se iniciará el juego con una profundidad de busqueda 4
     def iniciarReversiD(self):
+        #se destruye el tk para poder iniciar el tk del maingam
         self.menu.destroy()
+        #se inicia el juego con dificultado 4
         self.iniciarReversi(4)
 
+    #metodo que inicia REVERSI, recibe como parametro la dificultad o profundidad de busqueda para minimax
     def iniciarReversi(self, dificultad):
 
+        #instanciamos en principal el TK()
         self.principal = Tk()
+        #Se establece la dificultad de busqueda según lo elegido por el usuario
         self.juego.profundidadBusqueda = dificultad
+        
+        
         self.principal.title("Reversi")
         self.botones=[]
         self.negro = PhotoImage(file="negro.png")
@@ -104,9 +121,11 @@ class Reversi:
                 messagebox.showinfo("Reversi Game", "Has perdido!")
             
             self.juego.reinciar()
+
             for i in range(6):
                 for j in range(6):
                     self.botones[i][j]["image"] = self.vacio
+            
             self.botones[2][2]["image"] = self.blanco
             self.juego.tablero[2][2] = "-1"
             self.botones[3][3]["image"] = self.blanco
