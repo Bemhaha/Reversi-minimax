@@ -94,8 +94,8 @@ class Reversi:
 
     def victoria(self, tablero):
         if self.juego.estadoFinal(tablero):
-            print("Estamos en estado final = ", self.juego.estadoFinal(tablero))
-            print("el ganador es = ", self.juego.ganador)
+            #print("Estamos en estado final = ", self.juego.estadoFinal(tablero))
+            #print("el ganador es = ", self.juego.ganador)
             if self.juego.ganador == "1":
                 messagebox.showinfo("Reversi Game", "Has Ganado")
             elif self.juego.ganador == "0":

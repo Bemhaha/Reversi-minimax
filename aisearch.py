@@ -3,139 +3,144 @@ from tkinter.constants import E, FALSE, NO
 
 class ReversiGame:
 
+    #Constructor de la clase que contiene la lógica de Reversi en conjunto a su algoritmo MiniMax
     def __init__(self, turno = "1"):
 
-        self.tablero = self.generaTablero()
-        self.completo = False
-        self.ganador = None
-        self.jugador = turno
-        self.nodos = 0
-        self.profundidadBusqueda = 1
-        print(self.tablero)
+        #se instancian los atributos bases para poder desarrollar el juego de manera óptima
+        self.tablero = self.generaTablero() #Contiene una matriz de 6x6 que contendrá los datos de las jugadas, "0" si es tablero vacio, "1" si es ficha negro "-1" si es ficha blanco
+        self.completo = False #Booleano que nos indica si el tablero se completó o aún quedan espacios pendientes
+        self.ganador = None #este atributo indicará con 1 si ganó el usuario, -1 si ganó la computadora y 0 si es empate
+        self.jugador = turno #esta variable alterna entre 1 y -1 según sea el turno de cada jugador
+        self.nodos = 0 #contador de nodos generados para mostrar por consola los nodos creados en el árbol de búsqueda según requerimientos del profesor
+        self.profundidadBusqueda = 1 #profundidad de busqueda por defecto de MiniMax
     
 
-
+    #Función que se encarga de reiniciar la clase para poder volver a jugar Reversi una vez completado el juego en curso
     def reinciar(self):
 
-        self.tablero= self.generaTablero()
-        self.completo = False
-        self.ganador = None
-        self.jugador = "1"
+        self.tablero= self.generaTablero() #volvemos a crear la matriz con "0"
+        self.completo = False #indicamos que la matriz aún tiene posibles jugadas
+        self.ganador = None #indicamos que aún no hay un ganador
+        self.jugador = "1" #indicamos quién parte jugando 
 
+    #función encargada de generar un tablero nuevo para Reversi, es una matriz de 6x6 la cual contendrá "0"
     def generaTablero(self):
         
-        tablero = []
+        tablero = [] #instanciamos la lista
 
+        #ciclo que permite crear la lista de listas o matriz
         for i in range(6):
             tablero.append([])
             for j in range(6):
-                tablero[i].append("0")
+                tablero[i].append("0") #insertamos los "0" o fichas vacias del tablero
 
-        return tablero      
+        return tablero #se retorna el tablero limpio
     
+    #Esta función se encarga de evaluar si ya nos encontramos en el momento de designar un ganador dado que el tablero ya no tiene "0" en el, y así retornar un booleano indicandonos la situación
     def estadoFinal(self, tablero):
-        self.evaluar()
-        #print("aca en estado final = ", self.ganador)
+        self.evaluar() #se llama a la función evaluar, la cual verá si aún hay "0" en la matriz, en caso de no encontrar, verá quién ganó
 
-        if self.completo:
-            #print("TRUE")
+        if self.completo: #si estamos en situación de evaluar el ganador, se retornará VERDADERO
             return True
-        else:
-            #print("FALSE")
+        else:           #en caso contrario retornará FALSO
             return False
 
 
-    
+    #Función que se encarga de evaluar si hay un ganador o no 
     def evaluar(self):
         
         suma = 0
-        #print("Vamos a evaluar")
-        #print("hay ceros?= ", '0' not in self.tablero)
 
         estado = False
 
+        #en este ciclo vemos si el tablero se completó o no, si hay por lo menos un "0" la condición interna, sabremos que aún es posible seguir jugando
         for x in range(6):
             for y in range(6):
                 if self.tablero[x][y] == "0":
                     estado = True
 
+        #si el estado se mantiene FALSO, podemos evaluar quién ganó haciendo una suma del tablero completo, dado que el tablero está lleno de "1" o "-1" si la suma es negativa podemos asumir que ganó Blanco, si es positiva ganó negro, si es 0 es empate
         if not estado:
             self.completo = True
             for i in range (6):
                 for j in range(6):
                     suma += int(self.tablero[i][j])
         
-            if suma > 0:
+            if suma > 0: #caso en que gana Negro
                 self.ganador = "1"
-            elif suma < 0:
+            elif suma < 0: #caso en que gana blanco
                 self.ganador = "-1"
-            else:
+            else: #caso de empate
                 self.ganador = "0"
-        else:
+        else:#se mantiene FALSO en caso de aún poder seguir jugando
             self.completo = False
 
         
-            
-#buscar posibles jugadas
+    #En esta función vemos si la jugada que vamos a intentar es valida o no
     def jugadaValida(self, tablero , ficha, x, y):
-
-        #print("fui llamada")
         
+        #primero revisamos si está disponible la celda para poner una ficha encima
         if tablero[x][y] != "0":
             return False
         else:
+            #creamos una lista vacía de adyacentes y un booleano de adyacentes para poder ver si la jugada es válida más abajo
             adyacencia = False
             adyacencias = []
 
+            #en este For doble recorremos la matriz en busqueda de los nodos adyacentes distintos de 0 del punto (x,y), en caso de no haber adyacencia quedará en FALSO
             for i in range(max(0, x-1), min(x+2,6)):
                 for j in range(max(0,y-1), min(y+2,6)):
                     if tablero[i][j] != "0":
                         adyacencia = True
                         adyacencias.append([i,j])
             
-            if not adyacencia:
+            if not adyacencia: #retornamos jugada invalida ya que no hay fichas adyacentes al punto (x,y), por lo tanto, automaticamente es una jugada no valida
                 return False
             else:
 
-                booleano = False
+                booleano = False #bandera que usaremos para evaluar si es una jugada valida
 
-                for adyacencia in adyacencias:
-
+                for adyacencia in adyacencias: #revisamos las adyacencias para ver si podemos jugar en el punto (x,y) según las reglas de REVERSi
+                    
+                    #se extrae el punto x e y de la lista de adyacencias
                     adyX = adyacencia[0]
                     adyY = adyacencia[1]
-
+                    
+                    #si la ficha es igual a la ficha del jugador, seguimos revisando las otras que queden en la lista de adyacencias, en caso contrario, revisamos si la jugada es posible
                     if tablero[adyX][adyY] == ficha:
                         continue
                     else:
-                        #modulo
+
+                        #acotamos el area de busqueda
                         varX = adyX - x
                         varY = adyY - y
                         auxX = adyX
                         auxY = adyY
-
+                        #ciclo que revisará si la jugada es valida en el area acotado
                         while 0 <= auxX <=5 and 0 <= auxY <= 5:
-                            if tablero[auxX][auxY] == "0":
+                            if tablero[auxX][auxY] == "0": #en caso de que encontremos un "0", la jugada será invalida, haremos un break y revisaremos la posible siguiente jugada
                                 break
 
-                            if tablero[auxX][auxY] == ficha:
+                            if tablero[auxX][auxY] == ficha: #si encontramos en el area acotada otra ficha del jugador, siginifca que podemos hacer reversi, y por lo tanto estamos en una diagonal o vertical o horizontal y es jugada valida
                                 booleano = True
                                 break
-
+                            
+                            #se incrementan los contadores para volver a acotar el area de busqueda
                             auxX += varX
                             auxY += varY
+                #se retorna el booleano, si es valida la jugada será TRUE, en caso contrario FALSE
                 return booleano
 
-#drama end
-
-    #heuristica extraida de un libro 
+    #Heuristica que evalua con un puntaje la jugada de un posible tablero futuro elegido para MiniMax
     def heuristicaMejorEsquina(self, tablero, ficha):
-        #print("holanda que talca")
 
+        #Iniciamos el puntaje total en 0, además de dar puntaje a las posibles jugadas, esta heuristica se basa en que las mejores jugadas son las esquinas
         puntajeHeuristica = 0
-        puntajeEsquina = 25
-        puntajeAdyacente = 5
-        puntajeLateral = 5
+        puntajeEsquina = 25 #si la jugada es una esquina, sumaremos 25 pts
+        puntajeAdyacente = 5 # si es una diagonal sumamos 5 puntos
+        puntajeLateral = 5  #si es vertical u hotizontal la jugada sumamos 5 puntos
 
+        #evaluamos que ficha es aliada y cual es enemiga
         if ficha == 1:
             ficha = "1"
             fichaEnemiga = "-1"
@@ -143,44 +148,46 @@ class ReversiGame:
             ficha = "-1"
             fichaEnemiga = "1"
 
+        #comenzamos con un for doble el analisis de la jugada en todo el tablero
         for x in range(6):
             for y in range(6):
-                sumaAux = 1
-                if (x == 0 and y == 1) or (x == 1 and 0 <= y <= 1):
-                    if tablero[0][0] == ficha:
+                sumaAux = 1 #inciamos la suma en 1 que es el puntaje "base"
+                if (x == 0 and y == 1) or (x == 1 and 0 <= y <= 1): #vemos si es una jugada del lateral izquierdo
+                    if tablero[0][0] == ficha: #si la ficha encontrada es aliada, sumamos puntos
                         sumaAux = puntajeLateral
-                    else:
+                    else: #en caso que sea ficha enemiga, los restamos 
                         sumaAux = -puntajeAdyacente
                     
-                elif (x == 0 and y == 4) or (x == 1 and 4 <= y <= 5):
-                    if tablero[5][0] == ficha:
+                elif (x == 0 and y == 4) or (x == 1 and 4 <= y <= 5): #vemos si la jugada posible es del lateral izquierdo casi esquina
+                    if tablero[5][0] == ficha:#si la ficha encontrada es aliada, sumamos puntos
+                        sumaAux = puntajeLateral
+                    else:#en caso que sea ficha enemiga, los restamos
+                        sumaAux = -puntajeAdyacente
+                elif (x == 5 and y == 1) or (x == 4 and 0 <= y <=1): #vemos si la jugada posible es del lateral derecho o casi esquina
+                    if tablero[0][5] == ficha: #si la ficha es aliada, sumamos puntos
                         sumaAux = puntajeLateral
                     else:
-                        sumaAux = -puntajeAdyacente
-                elif (x == 5 and y == 1) or (x == 4 and 0 <= y <=1):
-                    if tablero[0][5] == ficha:
+                        sumaAux = -puntajeAdyacente #en caso contrario, restamos
+                elif (x == 5 and y == 4) or (x == 4 and 4 <= y <= 5): #vemos si la jugada posible es lateral inferior o izquierda
+                    if tablero[5][5] == ficha: #en caso de tener ficha en la esquina, sumamos puntaje lateral, dado que la esquina ya está tomada por nosotros
                         sumaAux = puntajeLateral
                     else:
-                        sumaAux = -puntajeAdyacente
-                elif (x == 5 and y == 4) or (x == 4 and 4 <= y <= 5):
-                    if tablero[5][5] == ficha:
-                        sumaAux = puntajeLateral
-                    else:
-                        sumaAux = -puntajeAdyacente
-                elif (x == 0 and 1 < y < 4) or (x == 5 and 1 < y < 4) or (y == 0 and 1 < x < 4) or (y == 5 and 1<x<4):
-                        sumaAux = puntajeLateral
-                elif (x == 0 and y == 0) or (x == 0 and y == 5) or (x == 5 and y == 0) or (x == 5 and y == 5):
-                    sumaAux = puntajeEsquina
-                #print("sumaaux ", sumaAux)
+                        sumaAux = -puntajeAdyacente #en caso contrario restamos
+                elif (x == 0 and 1 < y < 4) or (x == 5 and 1 < y < 4) or (y == 0 and 1 < x < 4) or (y == 5 and 1<x<4): #revisamos el centro de la matriz de 6x6, para ver las jugadas posibles
+                        sumaAux = puntajeLateral #si encontramos espacios, sumamos puntaje lateral
+                elif (x == 0 and y == 0) or (x == 0 and y == 5) or (x == 5 and y == 0) or (x == 5 and y == 5): #y el ultimo caso, es que tengamos libre las esquinas y sea nuestra posible siguiente jugada
+                    sumaAux = puntajeEsquina #así que sumamos puntaje esquina, el que es el mas grande 
+                
+                #si la posición indicada es de nuestra ficha aliada, lo sumamos a nuestro puntaje total de heuristica, en caso contrario, lo restamos
                 if tablero[x][y] == ficha:
                     puntajeHeuristica += sumaAux
                 elif tablero[x][y] == fichaEnemiga:
                     puntajeHeuristica -= sumaAux
-                #print("puntajeheuristica", puntajeHeuristica)
-        #print("suma aux: ", sumaAux)
-        #print("puntaje ewe -->  ", puntajeHeuristica) 
+
+        #retornamos el puntaje de la juagada posible con el tablero dado 
         return puntajeHeuristica
 
+    #Función que se encarga de hacer reversi a las fichas que se deban según la ficha puesta por un jugador
     def movimientoAReversear(self, tab, x, y, ficha):
 
         newTab = self.copiaTablero(tab)
@@ -224,17 +231,12 @@ class ReversiGame:
 
                     auxX += varX
                     auxY += varY
-        
-        #print("Camino a reversear = ", caminoAReversear)
-        #print("lista de nodos a reversear = ", reversear)
+    
         for nodo in reversear:
-            #print("vamos a añadir = ", nodo)
             newTab[nodo[0]][nodo[1]] = ficha
-            #print("nuevo nodo la ficha es = ", newTab[nodo[0]][nodo[1]] )
-        
-        #print("Tablero Reverseado = ", newTab)
 
         return newTab
+
     
     def copiaTablero(self, tab):
         newTab = self.generaTablero()
@@ -295,10 +297,6 @@ class ReversiGame:
                     mejorTableroJugar = auxTableros[i]
             return ([mejorPuntaje, mejorTableroJugar, posibilidades[i]])
 
-
-
-
-#new drama ia end
     
     def jugar(self, jugadax, jugaday):
         self.tablero[jugadax][jugaday] = self.jugador
