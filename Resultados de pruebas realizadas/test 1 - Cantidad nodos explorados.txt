@@ -1,0 +1,88 @@
+Nivel dificultad = Dificil
+profundidad de busqueda = 4
+Nodos explorados por jugada = 
+
+La cantidad de nodos explorados por minimax fueron =  121
+La cantidad de nodos explorados por minimax fueron =  781
+La cantidad de nodos explorados por minimax fueron =  781
+La cantidad de nodos explorados por minimax fueron =  781
+La cantidad de nodos explorados por minimax fueron =  1555
+La cantidad de nodos explorados por minimax fueron =  1555
+La cantidad de nodos explorados por minimax fueron =  41371
+La cantidad de nodos explorados por minimax fueron =  22621
+La cantidad de nodos explorados por minimax fueron =  7381
+La cantidad de nodos explorados por minimax fueron =  1555
+La cantidad de nodos explorados por minimax fueron =  4681
+La cantidad de nodos explorados por minimax fueron =  4681
+La cantidad de nodos explorados por minimax fueron =  1555
+La cantidad de nodos explorados por minimax fueron =  341
+La cantidad de nodos explorados por minimax fueron =  121
+La cantidad de nodos explorados por minimax fueron =  5
+
+
+Nivel dificultad = Normal
+profundidad de busqueda = 3
+RES = PIERDE NEGRO
+Nodos explorados por jugada = 
+
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  85
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  85
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  85
+La cantidad de nodos explorados por minimax fueron =  15
+La cantidad de nodos explorados por minimax fueron =  4
+La cantidad de nodos explorados por minimax fueron =  15
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  4
+
+otra partida = RES = GANA NEGRO
+
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  400
+La cantidad de nodos explorados por minimax fueron =  400
+La cantidad de nodos explorados por minimax fueron =  585
+La cantidad de nodos explorados por minimax fueron =  1464
+La cantidad de nodos explorados por minimax fueron =  820
+La cantidad de nodos explorados por minimax fueron =  585
+La cantidad de nodos explorados por minimax fueron =  259
+La cantidad de nodos explorados por minimax fueron =  156
+La cantidad de nodos explorados por minimax fueron =  156
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  40
+La cantidad de nodos explorados por minimax fueron =  15
+La cantidad de nodos explorados por minimax fueron =  1
+La cantidad de nodos explorados por minimax fueron =  1
+La cantidad de nodos explorados por minimax fueron =  1
+
+
+
+Nivel dificultad = Fácil
+profundidad de busqueda = 2
+RES = GANA NEGRO
+Nodos explorados por jugada = 
+
+La cantidad de nodos explorados por minimax fueron =  13
+La cantidad de nodos explorados por minimax fueron =  43
+La cantidad de nodos explorados por minimax fueron =  73
+La cantidad de nodos explorados por minimax fueron =  43
+La cantidad de nodos explorados por minimax fueron =  31
+La cantidad de nodos explorados por minimax fueron =  13
+La cantidad de nodos explorados por minimax fueron =  21
+La cantidad de nodos explorados por minimax fueron =  157
+La cantidad de nodos explorados por minimax fueron =  73
+La cantidad de nodos explorados por minimax fueron =  43
+La cantidad de nodos explorados por minimax fueron =  31
+La cantidad de nodos explorados por minimax fueron =  43
+La cantidad de nodos explorados por minimax fueron =  21
+La cantidad de nodos explorados por minimax fueron =  7
+La cantidad de nodos explorados por minimax fueron =  3
+La cantidad de nodos explorados por minimax fueron =  1
+
