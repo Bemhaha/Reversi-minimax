@@ -6,14 +6,8 @@ import time
 class Reversi:
 
     def __init__(self):
-        self.principal = Tk()
+        self.principal = NONE
         self.menu = Tk()
-        self.principal.title("Reversi")
-        self.botones=[]
-        self.negro = PhotoImage(file="negro.png")
-        self.blanco = PhotoImage(file="blanco.png")
-        self.vacio = PhotoImage(file="vacio.png")
-        self.sugerencia = PhotoImage(file="sugerencia.png")
         self.juego = aisearch.ReversiGame()
         #self.iniciarReversi(3)
 
@@ -42,7 +36,14 @@ class Reversi:
 
     def iniciarReversi(self, dificultad):
 
+        self.principal = Tk()
         self.juego.profundidadBusqueda = dificultad
+        self.principal.title("Reversi")
+        self.botones=[]
+        self.negro = PhotoImage(file="negro.png")
+        self.blanco = PhotoImage(file="blanco.png")
+        self.vacio = PhotoImage(file="vacio.png")
+        self.sugerencia = PhotoImage(file="sugerencia.png")
 
         for i in range(6):
             fila=[]
