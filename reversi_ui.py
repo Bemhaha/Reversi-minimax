@@ -80,6 +80,16 @@ class Reversi:
                         self.botones[x][y]["image"] = self.sugerencia
                         #print("cambio sugerencia")
 
+    def hayQuePasarLaJugada(self, jugador):
+        
+        tablero = self.juego.tablero
+
+        for x in range(6):
+            for y in range(6):
+                if self.juego.jugadaValida(tablero, jugador, x, y):
+                    return True
+        
+        return False
         
 
     def victoria(self, tablero):
@@ -141,8 +151,10 @@ class Reversi:
                 self.juego.tablero = resMinmax[1]
                 self.actualizacionTablero(self.juego.tablero)
                 self.pistas("1")
-                #print("tablero = ", self.juego.tablero)
                 self.victoria(self.juego.tablero)
+
+                #print("tablero = ", self.juego.tablero)
+                
 
 juego = Reversi()
 mainloop()
