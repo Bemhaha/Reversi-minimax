@@ -190,80 +190,89 @@ class ReversiGame:
     #Función que se encarga de hacer reversi a las fichas que se deban según la ficha puesta por un jugador
     def movimientoAReversear(self, tab, x, y, ficha):
 
-        newTab = self.copiaTablero(tab)
+        newTab = self.copiaTablero(tab) #copiamos el tablero para trabajar sobre el sin modificar el original 
 
-        newTab[x][y] = ficha
+        newTab[x][y] = ficha #posicionamos la ficha previamente validada en la posición (x, y) del tablero
 
-        adyacentes = []
+        adyacentes = [] #lista con tuplas de las fichas adyacentes a la ficha colocada
 
-        for i in range(max(0,x-1),min(x+2,5)):
+        #Buscamos en el espacio acotado los adyacentes
+        for i in range(max(0,x-1),min(x+2,5)): 
             for j in range(max(0,y-1),min(y+2,5)):
-                if newTab[i][j] != "0":
-                    adyacentes.append([i, j])
+                if newTab[i][j] != "0": #Si hay fichas podremos darlas vueltas y hacerles "reversi", así que buscamos los adyacentes que sean distintos de 0 o vacio
+                    adyacentes.append([i, j]) #Añadimos a la lista adyacente las coordenadas encontradas ya sea con "1" o "-1"
         
-        reversear = []
+        reversear = [] #fichas que deberemos dar vuelta, se instancia la lista
 
-        #print(adyacentes)
+        #ciclo para revisar los adyacentes
         for adyacente in adyacentes:
+            #Extraemos de la lista la tupla (x, y)
             adyX = int(adyacente[0])
             adyY = int(adyacente[1])
 
+            #revisamos si en la tupla elegida hay una ficha enemiga, si es así, entramos a la condición
             if newTab[adyX][adyY] != ficha:
 
+                #lista que guardara las posiciones de las fichas que debemos reversear o hacer "reversi"
                 caminoAReversear = []
 
+                #preparamos las precondiciones para acotar el cuadro de busqueda y preparar los sectores de busqueda
                 varX = adyX - x
                 varY = adyY - y
                 auxX = adyX
                 auxY = adyY
 
+                #comenzamos a revisar las fichas que debemos reversear o no (reversear o hacer reversi)
                 while 0 <= auxX <= 5 and 0 <= auxY <= 5:
+                    #insertamos la tupla a la lista
                     caminoAReversear.append([auxX, auxY])
                     evaluar = newTab[auxX][auxY]
 
+                    #revisamos si es una fucha vacia, en caso de ser no tenemos en que hacer reversi, hacemos un break y pasamos a la siguiente
                     if evaluar == "0":
                         break
-
+                    
+                    #si hay una ficha y podemos hacer reversi, agregamos a la lista reveresear
                     if evaluar == ficha:
                         for nodo in caminoAReversear:
                             reversear.append(nodo)
                         break
-
+                    #sumamos los contadores del ciclo
                     auxX += varX
                     auxY += varY
-    
+
+        #hacemos reversi 
         for nodo in reversear:
             newTab[nodo[0]][nodo[1]] = ficha
 
+        #se retorna el nuevo tablero con las fichas reverseadas 
         return newTab
 
     
+    #Metodo encargado de crear un tablero copia de otro dado por parametros
     def copiaTablero(self, tab):
+        #se crea un tablero nuevo 
         newTab = self.generaTablero()
 
+        #con un ciclo doble copiamos los datos contenidos en el tablero dado por parametro
         for x in range(6):
             for y in range(6):
                 newTab[x][y] = tab[x][y]
         
+        #retornamos el nuevo tablero con las celdas copiadas
         return newTab
-
-#new drama ia
 
     def minimaxReversi(self, tableroOriginal, profundidadBusqueda, minOrMax):
         
         self.nodos += 1
         auxTableros = []
         posibilidades = []
-        
-        #print("soy minimax")
 
         for x in range(6):
             for y in range(6):
                 if self.jugadaValida(self.tablero, "-1", x, y):
                     intentar = self.movimientoAReversear(tableroOriginal, x, y, "-1")
                     auxTableros.append(intentar)
-                    #print("vamos a intentar esto: ")
-                    #print(intentar)
                     posibilidades.append([x,y])
         
         
@@ -288,10 +297,8 @@ class ReversiGame:
             #min
             mejorPuntaje = 10000
             mejorTableroJugar = []
-            #print(len(auxTableros))
             for i in range(len(auxTableros)):
                 puntajeAux = self.minimaxReversi(auxTableros[i], profundidadBusqueda-1, 1)[0]
-                #print(puntajeAux)
                 if puntajeAux < mejorPuntaje:
                     mejorPuntaje = puntajeAux
                     mejorTableroJugar = auxTableros[i]
@@ -300,5 +307,5 @@ class ReversiGame:
     
     def jugar(self, jugadax, jugaday):
         self.tablero[jugadax][jugaday] = self.jugador
-        self.jugador *= -1 #ni idea que hace esto jaja
+        self.jugador *= -1 #ni idea que hace esto jaja salu2
         
