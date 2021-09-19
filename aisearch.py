@@ -148,7 +148,7 @@ class ReversiGame:
             ficha = "-1"
             fichaEnemiga = "1"
 
-        #comenzamos con un for doble el analisis de la jugada en todo el tablero
+        #comenzamos con un for doble para el analisis del tablero entrgado por minimax, así revisamos celda por celda
         for x in range(6):
             for y in range(6):
                 sumaAux = 1 #inciamos la suma en 1 que es el puntaje "base"
@@ -173,7 +173,7 @@ class ReversiGame:
                         sumaAux = puntajeLateral
                     else:
                         sumaAux = -puntajeAdyacente #en caso contrario restamos
-                elif (x == 0 and 1 < y < 4) or (x == 5 and 1 < y < 4) or (y == 0 and 1 < x < 4) or (y == 5 and 1<x<4): #revisamos el centro de la matriz de 6x6, para ver las jugadas posibles
+                elif (x == 0 and 1 < y < 4) or (x == 5 and 1 < y < 4) or (y == 0 and 1 < x < 4) or (y == 5 and 1<x<4): #revisamos los laterales aduyacentes de la matriz de 6x6, para ver las jugadas posibles
                         sumaAux = puntajeLateral #si encontramos espacios, sumamos puntaje lateral
                 elif (x == 0 and y == 0) or (x == 0 and y == 5) or (x == 5 and y == 0) or (x == 5 and y == 5): #y el ultimo caso, es que tengamos libre las esquinas y sea nuestra posible siguiente jugada
                     sumaAux = puntajeEsquina #así que sumamos puntaje esquina, el que es el mas grande 
